@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dundee Contemporary Arts - Explore Dundee</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        
+        /* Header Styling */
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/api/placeholder/1200/400') center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Navigation Bar Styling */
+        nav {
+            background-color: #2c3e50;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: #34495e;
+            border-radius: 5px;
+        }
+        
+        /* Main Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        /* Section Styling */
+        .section {
+            margin-bottom: 40px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+           /* Image Gallery Slider */
+           .gallery {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+            height: 400px;
+        }
+
+        .gallery-container {
+            display: flex;
+            width: 300%; /* For 3 images */
+            animation: slideshow 15s infinite;
+        }
+
+        .gallery-container img {
+            width: calc(100% / 3); /* For 3 images */
+            height: 400px;
+            object-fit: cover;
+        }
+
+        /* Automatic slideshow animation */
+        @keyframes slideshow {
+            0%, 25% {
+                transform: translateX(0);
+            }
+            33%, 58% {
+                transform: translateX(-33.33%);
+            }
+            66%, 91% {
+                transform: translateX(-66.66%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Navigation dots using radio buttons (CSS-only solution) */
+        .gallery input[type="radio"] {
+            display: none;
+        }
+
+        .gallery-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .gallery-dots label {
+            display: block;
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* When radio button is checked, style the corresponding label */
+        #slide1:checked ~ .gallery-dots label[for="slide1"],
+        #slide2:checked ~ .gallery-dots label[for="slide2"],
+        #slide3:checked ~ .gallery-dots label[for="slide3"] {
+            background-color: white;
+        }       
+
+        /* When radio button is checked, move the slider to the corresponding position */
+        #slide1:checked ~ .gallery-container {
+            transform: translateX(0);
+            animation: none;
+        }
+
+        #slide2:checked ~ .gallery-container {
+            transform: translateX(-33.33%);
+            animation: none;
+        }
+
+        #slide3:checked ~ .gallery-container {
+            transform: translateX(-66.66%);
+            animation: none;
+        }
+
+        /* Restart animation when radio is unchecked */
+        .gallery-container {
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Hover effect to pause the animation */
+        .gallery:hover .gallery-container {
+            animation-play-state: paused;
+        }
+        
+        
+        /* Facility Cards */
+        .facilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .facility-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .facility-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        
+        /* Events Table */
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .events-table th, .events-table td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .events-table th {
+            background-color: #f0f0f0;
+            color: #2c3e50;
+        }
+        
+        .events-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Visit Info */
+        .visit-info {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .visit-info h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-item h4 {
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+        
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: #34495e;
+        }
+        
+        /* Footer Styling */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav a {
+                padding: 8px 10px;
+                margin: 5px;
+            }
+            
+            .events-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Dundee Contemporary Arts</h1>
+        <p>A hub of creativity in the heart of Dundee</p>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="exploredundee.html">Home</a>
+        <a href="exploredundee.html#about">About Dundee</a>
+        <a href="exploredundee.html#attractions">Attractions</a>
+        <a href="exploredundee.html#history">History</a>
+        <a href="exploredundee.html#visit">Plan Your Visit</a>
+    </nav>
+    
+    <!-- Main Content Container -->
+    <div class="container">
+        <!-- About Dundee Contemporary Arts Section -->
+        <section class="section">
+            <h2>About Dundee Contemporary Arts</h2>
+            <p>Dundee Contemporary Arts (DCA) is an internationally renowned center for contemporary art, cinema, print studio, and creative learning in the heart of Dundee's cultural quarter. Opened in 1999, DCA has become a vital cultural hub for the city and has played a significant role in Dundee's cultural renaissance.</p>
+            
+            <p>Housed in a converted garage and warehouse, the award-winning building was designed by Richard Murphy Architects and has become one of the city's most distinctive architectural landmarks. The center aims to enrich people's lives through art, culture, and creativity.</p>
+            
+            <!-- Image Gallery -->
+            <div class="gallery">
+                <!-- Hidden radio buttons for controlling the slider -->
+                <input type="radio" name="gallery-control" id="slide1" checked>
+                <input type="radio" name="gallery-control" id="slide2">
+                <input type="radio" name="gallery-control" id="slide3">
+                
+                <!-- Navigation dots (labels connected to radio buttons) -->
+                <div class="gallery-dots">
+                    <label for="slide1"></label>
+                    <label for="slide2"></label>
+                    <label for="slide3"></label>
+                </div>
+                
+                <!-- Image container -->
+                <div class="gallery-container">
+                    <img src="images/DCA-exterior.jpg" alt="DCA Building Exterior">
+                    <img src="images/DCA-gallery.jpg.webp" alt="DCA Gallery Space">
+                    <img src="images/DCA-print.webp" alt="DCA Print Studio">
+                </div>
+            </div>
+        </section>
+        
+        <!-- What We Offer Section -->
+        <section class="section">
+            <h2>What We Offer</h2>
+            <div class="facilities">
+                <!-- Contemporary Art Galleries -->
+                <div class="facility-card">
+                    <h3>Contemporary Art Galleries</h3>
+                    <p>DCA presents a diverse program of contemporary art exhibitions featuring world-renowned artists alongside emerging talent. The two gallery spaces host approximately six major exhibitions per year, showcasing everything from painting and sculpture to film, installation, and digital art.</p>
+                </div>
+                
+                <!-- Cinema -->
+                <div class="facility-card">
+                    <h3>Cinema</h3>
+                    <p>Our two-screen cinema shows the best in independent and world cinema, from arthouse films to cult classics and new releases. We also host special screenings, film festivals, and Q&A sessions with filmmakers throughout the year.</p>
+                </div>
+                
+                <!-- Print Studio -->
+                <div class="facility-card">
+                    <h3>Print Studio</h3>
+                    <p>One of Scotland's leading print studios, offering facilities for a wide range of printmaking techniques including etching, screenprinting, lithography, and digital printing. The studio welcomes everyone from complete beginners to professional artists.</p>
+                </div>
+                
+                <!-- Create Space -->
+                <div class="facility-card">
+                    <h3>Create Space</h3>
+                    <p>Our dedicated learning space hosts workshops, courses, and activities for all ages. From family drop-in sessions to masterclasses with visiting artists, our Create Space program encourages everyone to get involved with contemporary art.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Upcoming Events Section -->
+        <section class="section">
+            <h2>Upcoming Events</h2>
+            <p>DCA offers a vibrant program of events throughout the year. Here's a sample of what's coming up:</p>
+            
+            <!-- Events Table -->
+            <table class="events-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Event</th>
+                        <th>Type</th>
+                        <th>Ticketed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>March 25-30</td>
+                        <td>International Women's Film Festival</td>
+                        <td>Cinema</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>April 2-June 12</td>
+                        <td>Contemporary Sculpture Exhibition</td>
+                        <td>Gallery</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>April 15</td>
+                        <td>Introduction to Screenprinting Workshop</td>
+                        <td>Print Studio</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>April 22-23</td>
+                        <td>Family Weekend: Create Your Own Comic</td>
+                        <td>Create Space</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>May 5</td>
+                        <td>Artist Talk: Contemporary Scottish Art</td>
+                        <td>Gallery</td>
+                        <td>Yes</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>For the full event calendar and to book tickets, please visit the DCA website or contact our box office.</p>
+        </section>
+        
+        <!-- Visitor Information Section -->
+        <section class="section">
+            <h2>Visitor Information</h2>
+            <div class="visit-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>Opening Hours</h4>
+                        <p>Galleries: Daily 10:00 - 18:00</p>
+                        <p>Cinema: Daily from 11:00 (check listings)</p>
+                        <p>Print Studio: Tue-Sat 11:00 - 18:00</p>
+                        <p>DCA Shop: Daily 10:00 - 18:00</p>
+                        <p>Café Bar: Mon-Sat 10:00 - 00:00, Sun 11:00 - 00:00</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>Admission</h4>
+                        <p>Galleries: Free admission</p>
+                        <p>Cinema: £8.50 (standard), £7.00 (concessions)</p>
+                        <p>Print Studio: Varies by activity</p>
+                        <p>Create Space workshops: Varies by activity</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>Location</h4>
+                        <p>152 Nethergate</p>
+                        <p>Dundee DD1 4DY</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>Contact</h4>
+                        <p>Phone: +44 (0)1382 432444</p>
+                        <p>Email: info@dca.org.uk</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <h4>Facilities</h4>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>Jute Café Bar serving breakfast, lunch, dinner and drinks</li>
+                        <li>DCA Shop offering unique design items, prints, and books</li>
+                        <li>Free Wi-Fi throughout the building</li>
+                        <li>Fully accessible for wheelchair users</li>
+                        <li>Disabled parking spaces available</li>
+                        <li>Baby changing facilities</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Back Button -->
+            <a href="exploredundee.html" class="back-button">Back to Attractions</a>
+        </section>
+    </div>
+    
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 Explore Dundee | All information sourced from official DCA resources</p>
+    </footer>
+</body>
+</html>

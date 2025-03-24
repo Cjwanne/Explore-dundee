@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RRS Discovery - Explore Dundee</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        
+        /* Header Styling */
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/api/placeholder/1200/400') center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Navigation Bar Styling */
+        nav {
+            background-color: #2c3e50;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: #34495e;
+            border-radius: 5px;
+        }
+        
+        /* Main Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        /* Section Styling */
+        .section {
+            margin-bottom: 40px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+               /* Image Gallery Slider */
+               .gallery {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+            height: 400px;
+        }
+
+        .gallery-container {
+            display: flex;
+            width: 300%; /* For 3 images */
+            animation: slideshow 15s infinite;
+        }
+
+        .gallery-container img {
+            width: calc(100% / 3); /* For 3 images */
+            height: 400px;
+            object-fit: cover;
+        }
+
+        /* Automatic slideshow animation */
+        @keyframes slideshow {
+            0%, 25% {
+                transform: translateX(0);
+            }
+            33%, 58% {
+                transform: translateX(-33.33%);
+            }
+            66%, 91% {
+                transform: translateX(-66.66%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Navigation dots using radio buttons (CSS-only solution) */
+        .gallery input[type="radio"] {
+            display: none;
+        }
+
+        .gallery-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .gallery-dots label {
+            display: block;
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* When radio button is checked, style the corresponding label */
+        #slide1:checked ~ .gallery-dots label[for="slide1"],
+        #slide2:checked ~ .gallery-dots label[for="slide2"],
+        #slide3:checked ~ .gallery-dots label[for="slide3"] {
+            background-color: white;
+        }       
+
+        /* When radio button is checked, move the slider to the corresponding position */
+        #slide1:checked ~ .gallery-container {
+            transform: translateX(0);
+            animation: none;
+        }
+
+        #slide2:checked ~ .gallery-container {
+            transform: translateX(-33.33%);
+            animation: none;
+        }
+
+        #slide3:checked ~ .gallery-container {
+            transform: translateX(-66.66%);
+            animation: none;
+        }
+
+        /* Restart animation when radio is unchecked */
+        .gallery-container {
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Hover effect to pause the animation */
+        .gallery:hover .gallery-container {
+            animation-play-state: paused;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #2c3e50;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -13px;
+            background-color: white;
+            border: 4px solid #2c3e50;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .left::after {
+            right: -10px;
+        }
+        
+        .right::after {
+            left: -10px;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-content h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        /* Visit Info */
+        .visit-info {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .visit-info h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-item h4 {
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+        
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: #34495e;
+        }
+        
+        /* Footer Styling */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav a {
+                padding: 8px 10px;
+                margin: 5px;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 18px;
+            }
+            
+            .left::after, .right::after {
+                left: 18px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>RRS Discovery</h1>
+        <p>Captain Scott's Antarctic expedition ship, built in Dundee</p>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="exploredundee.html">Home</a>
+        <a href="exploredundee.html#about">About Dundee</a>
+        <a href="exploredundee.html#attractions">Attractions</a>
+        <a href="exploredundee.html#history">History</a>
+        <a href="exploredundee.html#visit">Plan Your Visit</a>
+    </nav>
+    
+    <!-- Main Content Container -->
+    <div class="container">
+        <!-- About RRS Discovery Section -->
+        <section class="section">
+            <h2>About RRS Discovery</h2>
+            <p>The Royal Research Ship Discovery is a historic Antarctic exploration vessel and the centerpiece of Dundee's waterfront Discovery Point attraction. Built in Dundee specifically for Antarctic exploration, the RRS Discovery carried Captain Robert Falcon Scott and Ernest Shackleton on their first, groundbreaking journey to Antarctica from 1901-1904, known as the Discovery Expedition.</p>
+            
+            <!-- Image Gallery -->
+            <div class="gallery">
+                <!-- Hidden radio buttons for controlling the slider -->
+                <input type="radio" name="gallery-control" id="slide1" checked>
+                <input type="radio" name="gallery-control" id="slide2">
+                <input type="radio" name="gallery-control" id="slide3">
+                
+                <!-- Navigation dots (labels connected to radio buttons) -->
+                <div class="gallery-dots">
+                    <label for="slide1"></label>
+                    <label for="slide2"></label>
+                    <label for="slide3"></label>
+                </div>
+                
+                <!-- Image container -->
+                <div class="gallery-container">
+                    <img src="images/rrs-ship.jpg" alt="RRS Discovery Ship">
+                    <img src="images/rrs-discoverypoint.jpg" alt="Discovery Point Museum">
+                    <img src="images/rrs-shipinterior.jpg" alt="Ship Interior">
+                </div>
+            </div>
+            
+            <!-- Dundee-Built Ship Section -->
+            <h3>A Dundee-Built Ship</h3>
+            <p>The RRS Discovery was built in Dundee by the Dundee Shipbuilders Company. Dundee was chosen for the construction due to its expertise in building wooden ships strong enough to navigate the icy waters of the Arctic, gained through the city's long history of whaling.</p>
+            
+            <p>Key features of the ship include:</p>
+            <ul style="margin: 20px 0 20px 40px;">
+                <li>Specially designed wooden hull with an unconventional rounded bow to ride up over the ice rather than break through it</li>
+                <li>Three masts with both steam and sail capabilities</li>
+                <li>Extra-thick hull reinforced with oak to withstand ice pressure</li>
+                <li>Watertight compartments for safety</li>
+                <li>Custom-built scientific laboratories for the expedition</li>
+            </ul>
+            
+            <!-- Historic Antarctic Expedition Section -->
+            <h3>The Historic Antarctic Expedition</h3>
+            <p>The British National Antarctic Expedition (1901-1904) was the first official British exploration of the Antarctic regions since James Clark Ross's voyage sixty years earlier. The expedition made numerous scientific discoveries and was the first to:</p>
+            <ul style="margin: 20px 0 20px 40px;">
+                <li>Record an Antarctic sledge journey</li>
+                <li>Discover the Antarctic Plateau where the South Pole is located</li>
+                <li>Discover the only snow-free Antarctic valleys</li>
+                <li>Study emperor penguins and their eggs</li>
+                <li>Reach further south than anyone before</li>
+            </ul>
+        </section>
+        
+        <!-- Discovery's Journey Through Time Section -->
+        <section class="section">
+            <h2>Discovery's Journey Through Time</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>1900-1901</h3>
+                        <p>Built in Dundee specifically for Antarctic research</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>1901-1904</h3>
+                        <p>First Antarctic expedition with Captain Scott and Ernest Shackleton</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>1905-1931</h3>
+                        <p>Served as a cargo vessel between London and Hudson Bay</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>1931-1979</h3>
+                        <p>Used as a training ship for Boy Scouts in London</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>1979-1986</h3>
+                        <p>Restoration work undertaken to return the ship to its 1901 condition</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>1986-Present</h3>
+                        <p>Returned to Dundee as a museum ship at Discovery Point</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Visitor Information Section -->
+        <section class="section">
+            <h2>Visitor Information</h2>
+            <div class="visit-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>Opening Hours</h4>
+                        <p>Monday - Saturday: 10:00 - 17:00</p>
+                        <p>Sunday: 11:00 - 17:00</p>
+                        <p>Last entry: 16:00</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>Admission</h4>
+                        <p>Adults: £12.50</p>
+                        <p>Children (5-15): £7.25</p>
+                        <p>Concessions: £10.50</p>
+                        <p>Family (2+2): £34.00</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>Location</h4>
+                        <p>Discovery Point</p>
+                        <p>Discovery Quay</p>
+                        <p>Dundee DD1 4XA</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>Contact</h4>
+                        <p>Phone: +44 (0)1382 309060</p>
+                        <p>Email: contact@discoverypointdundee.com</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <h4>Exhibition Highlights</h4>
+                    <p>Your visit includes access to:</p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>The RRS Discovery ship itself, with guided tours available</li>
+                        <li>Interactive museum with original artifacts from the Antarctic expeditions</li>
+                        <li>Audiovisual presentations about Antarctic exploration</li>
+                        <li>Specially commissioned film about the ship's history</li>
+                        <li>Gift shop featuring Antarctic and Scottish-themed merchandise</li>
+                        <li>Café with views over the River Tay</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Back Button -->
+            <a href="exploredundee.html" class="back-button">Back to Attractions</a>
+        </section>
+    </div>
+    
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 Explore Dundee | All information sourced from official Discovery Point resources</p>
+    </footer>
+</body>
+</html>
